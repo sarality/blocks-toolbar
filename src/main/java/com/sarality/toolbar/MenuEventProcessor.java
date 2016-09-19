@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.sarality.action.ActionContext;
 import com.sarality.action.ViewAction;
 
 import java.util.HashMap;
@@ -40,7 +42,8 @@ public class MenuEventProcessor {
     Integer itemId = item.getItemId();
     if (itemActionMap.containsKey(itemId)) {
       ViewAction action = itemActionMap.get(itemId);
-      action.perform();
+      View view = activity.getWindow().getDecorView();
+      action.perform(new ActionContext(view));
       return true;
     }
     return activity.onOptionsItemSelected(item);
