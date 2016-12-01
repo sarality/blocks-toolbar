@@ -46,6 +46,6 @@ public class MenuEventProcessor {
       action.perform(new ActionContext(view));
       return true;
     }
-    return activity.onOptionsItemSelected(item);
+    return false;
   }
 }
