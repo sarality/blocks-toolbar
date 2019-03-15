@@ -7,6 +7,7 @@ import android.support.v4.view.ActionProvider;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.sarality.action.ClickActions;
 import com.sarality.action.LongClickActions;
@@ -25,6 +26,7 @@ public class MultipleActionProvider extends ActionProvider {
   private MenuItem menuItem;
   private int itemId;
   private int itemLayoutId;
+  private Integer iconViewId;
 
   public MultipleActionProvider(Context context) {
     super(context);
@@ -39,18 +41,23 @@ public class MultipleActionProvider extends ActionProvider {
     return view;
   }
 
-  public void init(Activity activity, MultipleActionMenu menu, MenuItem menuItem, int itemId, int itemLayoutId) {
+  public void init(Activity activity, MultipleActionMenu menu, MenuItem menuItem, int itemId, int itemLayoutId,
+      Integer iconViewId) {
     this.activity = activity;
     this.menu = menu;
     this.menuItem = menuItem;
     this.itemId = itemId;
     this.itemLayoutId = itemLayoutId;
+    this.iconViewId = iconViewId;
   }
 
   private void initItem(View view) {
     Drawable iconDrawable = menuItem.getIcon();
-    if (iconDrawable != null) {
-      view.setBackgroundDrawable(iconDrawable);
+    if (iconDrawable != null && iconViewId != null) {
+      ImageView iconView = view.findViewById(iconViewId);
+      if (iconView != null) {
+        iconView.setImageDrawable(iconDrawable);
+      }
     }
     ViewAction clickAction = menu.getClickAction(itemId);
     if (clickAction != null) {
