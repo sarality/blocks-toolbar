@@ -1,12 +1,16 @@
 package com.sarality.toolbar;
 
 import android.app.Activity;
-import android.support.v4.view.MenuItemCompat;
+import android.graphics.drawable.Drawable;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.sarality.action.ClickActions;
+import com.sarality.action.LongClickActions;
 import com.sarality.action.ViewAction;
 
 import java.util.HashMap;
@@ -21,7 +25,7 @@ public class MultipleActionMenu {
 
   private final int menuResourceId;
   @SuppressWarnings("UseSparseArrays")
-  private final Map<Integer, Integer> itemLayoutMap = new HashMap<>();
+  private final Map<Integer, Integer> itemIconViewMap = new HashMap<>();
   private final SparseArray<ViewAction> clickActionMap = new SparseArray<>();
   private final SparseArray<ViewAction> longClickActionMap = new SparseArray<>();
 
@@ -29,8 +33,8 @@ public class MultipleActionMenu {
     this.menuResourceId = menuResourceId;
   }
 
-  public MultipleActionMenu withItem(int itemId, int itemLayoutId) {
-    itemLayoutMap.put(itemId, itemLayoutId);
+  public MultipleActionMenu withItem(int itemId, int itemIconId) {
+    itemIconViewMap.put(itemId, itemIconId);
     return this;
   }
 
@@ -47,11 +51,36 @@ public class MultipleActionMenu {
   public void init(Activity activity, Menu menu) {
     MenuInflater layoutInflater = activity.getMenuInflater();
     layoutInflater.inflate(menuResourceId, menu);
-    for (Integer itemId : itemLayoutMap.keySet()) {
-      int itemLayoutId = itemLayoutMap.get(itemId);
+  }
+
+  public void initItems(Activity activity, Menu menu) {
+    for (Integer itemId : itemIconViewMap.keySet()) {
       MenuItem menuItem = menu.findItem(itemId);
-      MultipleActionProvider actionProvider = (MultipleActionProvider) MenuItemCompat.getActionProvider(menuItem);
-      actionProvider.init(activity, this, menuItem, itemId, itemLayoutId);
+      if (menuItem != null) {
+        Integer iconViewId = itemIconViewMap.get(itemId);
+        initItem(activity, menuItem, itemId, iconViewId);
+      }
+    }
+  }
+
+  private void initItem(Activity activity, MenuItem menuItem, Integer itemId, Integer iconViewId) {
+    View view = menuItem.getActionView();
+    Drawable iconDrawable = menuItem.getIcon();
+
+    if (iconDrawable != null && iconViewId != null) {
+      ImageView iconView = view.findViewById(iconViewId);
+      if (iconView != null) {
+        iconView.setImageDrawable(iconDrawable);
+      }
+    }
+    ViewAction clickAction = getClickAction(itemId);
+    if (clickAction != null) {
+      new ClickActions(activity).register(clickAction).init(view);
+    }
+
+    ViewAction longClickAction = getLongClickAction(itemId);
+    if (longClickAction != null) {
+      new LongClickActions(activity).register(longClickAction).init(view);
     }
   }
 
