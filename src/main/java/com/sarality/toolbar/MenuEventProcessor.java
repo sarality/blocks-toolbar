@@ -31,7 +31,10 @@ public class MenuEventProcessor {
   }
 
   public void init(Menu menu) {
-    MenuInflater inflater = activity.getMenuInflater();
+    init(menu, activity.getMenuInflater());
+  }
+
+  public void init(Menu menu, MenuInflater inflater) {
     inflater.inflate(menuResourceId, menu);
     this.menu = menu;
   }
