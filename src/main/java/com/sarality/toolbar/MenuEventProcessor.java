@@ -82,9 +82,10 @@ public class MenuEventProcessor {
       if (animationDrawable != null) {
         animationDrawable.stop();
       }
-
-
     }
   }
 
+  public Menu getMenu() {
+    return menu;
+  }
 }
