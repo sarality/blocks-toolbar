@@ -3,7 +3,7 @@ package com.sarality.toolbar;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v4.view.ActionProvider;
+import androidx.core.view.ActionProvider;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
